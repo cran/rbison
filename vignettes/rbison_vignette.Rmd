@@ -1,0 +1,9 @@
+<!--
+%\VignetteEngine{knitr}
+%\VignetteIndexEntry{rbison vignette}
+-->
+
+rbison vignette - wrapper to the USGS BISON API
+======
+
+Check out the rbison vignette at the rOpenSci website here: [http://ropensci.org/tutorials/rbison_tutorial.html](http://ropensci.org/tutorials/rbison_tutorial.html)
