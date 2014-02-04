@@ -2,28 +2,40 @@
 \alias{bison}
 \title{Search for and collect data from the USGS Bison API.}
 \usage{
-  bison(species, type = "scientific_name", start = NULL,
-    count = 10, countyFips = NULL, county = NULL,
-    aoi = NULL, aoibbox = NULL)
+bison(species, type = "scientific_name", itis = FALSE, tsn = NULL,
+  start = NULL, count = 10, countyFips = NULL, county = NULL,
+  state = NULL, aoi = NULL, aoibbox = NULL, what = "all",
+  callopts = list())
 }
 \arguments{
   \item{species}{(required) A species name. (character)}
 
-  \item{type}{Type, one of scientific_name or common_name.
-  (character)}
+  \item{type}{(character) Type, one of scientific_name or
+  common_name.}
 
-  \item{start}{Record to start at. (numeric)}
+  \item{itis}{(logical) If TRUE, ITIS search is enabled. If
+  FALSE (default), not enabled.}
 
-  \item{count}{Number of records to return. (numeric)}
+  \item{tsn}{(numeric) Specifies the TSN to query by.
+  Example:162003}
 
-  \item{countyFips}{Specifies the county fips code to
-  geographically constrain the search to one county. Eg:
-  49015. (numeric)}
+  \item{start}{(numeric) Record to start at.}
 
-  \item{county}{County name. As codes are a pain in the
-  ass, you can put in the county name here instead of
-  specifying a countyFips entry, and bison will attempt to
-  look up the countyFips code. (character)}
+  \item{count}{(numeric) Number of records to return.}
+
+  \item{countyFips}{(character) Specifies the county fips
+  code to geographically constrain the search to one
+  county. Character must be supplied as a number starting
+  with zero may lose the zero. Eg: "49015".}
+
+  \item{county}{(character) County name. As codes are a
+  pain in the ass, you can put in the county name here
+  instead of specifying a countyFips entry, and bison will
+  attempt to look up the countyFips code. (character)}
+
+  \item{state}{(character) Specifies the state name to
+  geographically constrain the search.  Example:
+  Tennessee.}
 
   \item{aoi}{Specifies a WKT (Well-Known Text) polygon to
   geographically constrain the search.  Eg.: c(-111.06
@@ -40,23 +52,41 @@
   minx,miny,maxx,maxy). The coordinates are Spherical
   Mercator with a datum of WGS84. Example:
   -111.31,38.81,-110.57,39.21 (character)}
+
+  \item{what}{What to return?  One of 'all', 'summary',
+  'points', 'counties', 'states', 'raw', or 'list'. All
+  data is returned from the BISON API, but this parameter
+  lets you select just the parts you want, and the rest is
+  discarded before returning the result to you.}
+
+  \item{callopts}{Further args passed on to httr::GET for
+  HTTP debugging/inspecting.}
 }
 \description{
-  Search for and collect data from the USGS Bison API.
+Search for and collect data from the USGS Bison API.
 }
 \examples{
 \dontrun{
+bison(species="Bison bison", count=50, what='summary')
+bison(species="Bison bison", count=50, what='points')
+bison(species="Bison bison", count=50, what='counties')
+bison(species="Bison bison", count=50, what='states')
+bison(species="Bison bison", count=50, what='raw')
+bison(species="Bison bison", count=50, what='list')
+
 out <- bison(species="Bison bison", count=50) # by default gets 10 results
-bison_data(out) # see summary
-bison_data(out, datatype="counties") # see county data
-bison_data(out, datatype="states") # see state data
+out$summary # see summary
+out$counties # see county data
+out$states # see state data
+bisonmap(out, tomap = "points")
 bisonmap(out, tomap = "county")
+bisonmap(out, tomap = "state")
 
 # Search for a common name
-bison(species="Tufted Titmouse", type="common_name")
+bison(species="Tufted Titmouse", type="common_name", what='summary')
 
 # Constrain search to a certain county, 49015 is Emery County in Utah
-bison(species="Helianthus annuus", countyFips = 49015)
+bison(species="Helianthus annuus", countyFips = "49015")
 
 # Constrain search to a certain county, specifying county name instead of code
 bison(species="Helianthus annuus", county = "Los Angeles")
@@ -75,6 +105,6 @@ bison(species="Helianthus annuus", aoibbox = '-111.31,38.81,-110.57,39.21')
 }
 }
 \seealso{
-  \code{\link{bison_solr}} \code{\link{bison_tax}}
+\code{\link{bison_solr}} \code{\link{bison_tax}}
 }
 
