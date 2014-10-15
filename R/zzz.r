@@ -114,3 +114,7 @@ bison_map_maker <- function(x, geom, jitter, customize)
         customize
     }
 }
+
+bs_compact <- function (l) Filter(Negate(is.null), l)
+
+mssg <- function(x, y) if(x) message(y)

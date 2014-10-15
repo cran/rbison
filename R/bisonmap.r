@@ -1,6 +1,7 @@
 #' Make map to visualize BISON data.
 #'
 #' @import maptools mapproj sp ggplot2 gridExtra grid
+#' @export
 #' @param input Input bison object.
 #' @param tomap One of points (occurrences), county (counts by county), or state 
 #'    (counts by state). 
@@ -8,18 +9,18 @@
 #' @param jitter jitter position, see ggplot2 help.
 #' @param customize Pass in more to the plot. 
 #' @return Map (using ggplot2 package) of points on a map.
-#' @examples \dontrun{
+#' @examples \donttest{
 #' # Using function bison
-#' library(ggplot2)
+#' library("ggplot2")
 #' out <- bison(species="Accipiter", type="scientific_name", count=300)
 #' bisonmap(input=out)
 #' bisonmap(input=out, geom=geom_jitter, jitter=position_jitter(width = 0.3, height = 0.3))
 #' 
 #' # Using function bison_solr
-#' out <- bison_solr(scientific_name='Ursus americanus', rows=200)
+#' out <- bison_solr(scientificName='Ursus americanus', rows=200)
 #' bisonmap(out)
 #' }
-#' @export
+
 bisonmap <- function(input = NULL, tomap="points", geom = geom_point, 
                      jitter = NULL, customize = NULL)
 {
