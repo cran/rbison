@@ -1,6 +1,6 @@
 #' Search for and collect data from the USGS Bison API.
 #'
-#' @import httr assertthat
+#' @import httr
 #' @importFrom jsonlite fromJSON
 #' @importFrom plyr ldply
 #' @export
@@ -47,6 +47,10 @@
 #' @seealso \code{\link{bison_solr}} \code{\link{bison_tax}}
 #'
 #' @examples \donttest{
+#' bison(species="Bison bison", count=50, what='summary')
+#' bison(species="Bison bison", count=50, what='points')
+#' }
+#' @examples \dontrun{
 #' bison(species="Bison bison", count=50, what='summary')
 #' bison(species="Bison bison", count=50, what='points')
 #' bison(species="Bison bison", count=50, what='counties')
@@ -128,8 +132,8 @@ bison <- function(species=NULL, type="scientific_name", tsn=NULL, start=NULL, co
   countyFips=NULL, county=NULL, state=NULL, aoi=NULL, aoibbox=NULL, params=NULL,
   what='all', ...)
 {
-  assert_that(is.numeric(count))
-  assert_that(count >= 0)
+  stopifnot(is.numeric(count))
+  stopifnot(count >= 0)
 
   if(is.null(species)){
     type <- NULL
@@ -140,7 +144,7 @@ bison <- function(species=NULL, type="scientific_name", tsn=NULL, start=NULL, co
   if(!is.null(tsn)){
     itis <- 'itis'
     tsn <- as.numeric(as.character(tsn))
-    assert_that(is.numeric(tsn))
+    stopifnot(is.numeric(tsn))
   } else { itis <- NULL }
 
   # check if param names are in the accepted list
@@ -152,9 +156,9 @@ bison <- function(species=NULL, type="scientific_name", tsn=NULL, start=NULL, co
   tt <- GET(url, query=args, ...)
   warn_for_status(tt)
   if(tt$status_code > 201){
-    assert_that(tt$headers$`content-type` == "text/html;charset=utf-8")
+    stopifnot(tt$headers$`content-type` == "text/html;charset=utf-8")
   } else {
-    assert_that(tt$headers$`content-type` == "application/json;charset=UTF-8")
+    stopifnot(tt$headers$`content-type` == "application/json;charset=UTF-8")
   }
   if(tt$status_code > 201){
     res <- NA

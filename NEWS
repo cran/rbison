@@ -1,3 +1,13 @@
+rbison 0.4.5
+===============
+
+MINOR IMPROVEMENTS
+
+* Fixes for `\donttest`.
+* Removed dependency on `assertthat`. 
+* Sentence Case the Title in the DESCRIPTION file!!!!!!
+* Fixed a test for the `bisonmap()` function.
+
 rbison 0.4.3
 ===============
 
