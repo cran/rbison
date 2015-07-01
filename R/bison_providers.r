@@ -1,6 +1,5 @@
 #' Get information about BISON data providers.
 #'
-#' @import httr
 #' @importFrom plyr rbind.fill
 #' @export
 #'
@@ -12,7 +11,7 @@
 #' @param ... Further args passed on to httr::GET. See examples in \code{bison}
 #' @return A data.frame or list of data.frame's
 #'
-#' @examples \donttest{
+#' @examples \dontrun{
 #' head(bison_providers())
 #' head(bison_providers(provider_no=131))
 #' out <- bison_providers(details=TRUE)

@@ -61,7 +61,7 @@
 #'
 #' The USGS BISON Solr installation version as of 2014-10-14 was 4.4.
 #'
-#' @examples \donttest{
+#' @examples \dontrun{
 #' bison_solr(scientificName='Ursus americanus')
 #' }
 #'
@@ -124,7 +124,7 @@ bison_solr <- function(decimalLatitude=NULL, decimalLongitude=NULL, year=NULL, p
   recordedBy=NULL, occurrenceID=NULL, catalogNumber=NULL, ITIScommonName=NULL,
   kingdom=NULL, callopts=list(), verbose=TRUE, ...)
 {
-  url <- "http://bisonapi.usgs.ornl.gov/solr/occurrences/select/"
+  url <- "http://bison.usgs.ornl.gov/solrstaging/occurrences/select/"
   qu <- bs_compact(list(decimalLatitude=decimalLatitude,
                      decimalLongitude=decimalLongitude,
                      year=year,
@@ -152,7 +152,7 @@ bison_solr <- function(decimalLatitude=NULL, decimalLongitude=NULL, year=NULL, p
 
   args <- bs_compact(list(q=stuff, wt="json", ...))
 
-  tt <- GET(url, query=args, callopts)
+  tt <- GET(url, query=args, c(config(followlocation=1), callopts))
   mssg(verbose, tt$url)
   stop_for_status(tt)
   out <- content(tt, as="text")

@@ -1,6 +1,6 @@
 #' Search for and collect data from the USGS Bison API.
 #'
-#' @import httr
+#' @importFrom httr GET content warn_for_status stop_for_status config
 #' @importFrom jsonlite fromJSON
 #' @importFrom plyr ldply
 #' @export
@@ -46,10 +46,6 @@
 #'
 #' @seealso \code{\link{bison_solr}} \code{\link{bison_tax}}
 #'
-#' @examples \donttest{
-#' bison(species="Bison bison", count=50, what='summary')
-#' bison(species="Bison bison", count=50, what='points')
-#' }
 #' @examples \dontrun{
 #' bison(species="Bison bison", count=50, what='summary')
 #' bison(species="Bison bison", count=50, what='points')
@@ -101,8 +97,8 @@
 #' ## get curl verbose output to see what's going on with your request
 #' bison(tsn=162003, count=1, what="points", config=verbose())
 #' ## set a timeout so that the call stops after time x, compare 1st to 2nd call
-#' bison(tsn=162003, count=1, what="points", config=timeout(seconds=1))
-#' bison(tsn=162003, count=1, what="points", config=timeout(seconds=0.1))
+#' # bison(tsn=162003, count=1, what="points", config=timeout(seconds=1))
+#' # bison(tsn=162003, count=1, what="points", config=timeout(seconds=0.1))
 #' ## set cookies
 #' bison(tsn=162003, count=1, what="points", config=set_cookies(a = 1, b = 2))
 #' ## set cookies
@@ -164,19 +160,19 @@ bison <- function(species=NULL, type="scientific_name", tsn=NULL, start=NULL, co
     res <- NA
   } else {
     out <- content(tt, as="text")
+    json <- fromJSON(out, FALSE)
     what <- match.arg(what, choices=c("summary", "counties", "states", "points", "all", "raw", "list"))
     res <- switch(what,
-                  summary=bison_data(fromJSON(out, FALSE), "summary"),
-                  all=bison_data(fromJSON(out, FALSE), "all"),
-                  counties=bison_data(fromJSON(out, FALSE), "counties"),
-                  states=bison_data(fromJSON(out, FALSE), "states"),
-                  points=bison_data(fromJSON(out, FALSE), "points"),
+                  summary=bison_data(json, "summary"),
+                  all=bison_data(json, "all"),
+                  counties=bison_data(json, "counties"),
+                  states=bison_data(json, "states"),
+                  points=bison_data(json, "points"),
                   raw=out,
-                  list=fromJSON(out, FALSE)
+                  list=json
     )
   }
-  class(res) <- "bison"
-  return( res )
+  structure(res, class="bison")
 }
 
 check_params <- function(x){
@@ -217,28 +213,47 @@ bison_data <- function(input = NULL, datatype="summary")
 }
 
 getcounties <- function(x){
-  if(x$counties$total == 0){ NULL } else {
-    if(class(x$counties$data[[1]])=="character"){
-      df <- ldply(x$counties$data)
-    } else
-    {
-      df <- ldply(x$counties$data, function(y) data.frame(y))
+  tryx <- tryCatch(x$counties$total, error = function(e) e)
+  if(is(tryx, "simpleError") || is.null(tryx)){
+    NULL
+  } else {
+    if(x$counties$total == 0){
+      NULL
+    } else {
+      if(class(x$counties$data[[1]])=="character"){
+        df <- ldply(x$counties$data)
+      } else
+      {
+        df <- ldply(x$counties$data, function(y) data.frame(y))
+      }
+      names(df)[c(1,3)] <- c("record_id","county_name")
+      return(df)
     }
-    names(df)[c(1,3)] <- c("record_id","county_name")
-    return(df)
   }
 }
 
 getstates <- function(x){
-  if(x$counties$total == 0){ NULL } else {
-    df <- ldply(x$states$data, function(y) data.frame(y))
-    names(df)[c(1,3)] <- c("record_id","county_fips")
-    return(df)
+  tryx <- tryCatch(x$states$total, error = function(e) e)
+  if(is(tryx, "simpleError") || is.null(tryx)){
+    NULL
+  } else {
+    if(x$states$total == 0){
+      NULL
+    } else {
+      df <- ldply(x$states$data, function(y) data.frame(y))
+      names(df)[c(1,3)] <- c("record_id","county_fips")
+      return(df)
+    }
   }
 }
 
 getpoints <- function(x){
-  if(length(x$data) == 0){ NULL } else {
+  tryx <- tryCatch(x$data, error = function(e) e)
+  if(is(tryx, "simpleError")){
+    NULL
+  } else if(length(x$data) == 0){
+      NULL
+  } else {
     withlatlong <- x$data[sapply(x$data, length, USE.NAMES=FALSE) == 8]
     data_out <- ldply(withlatlong, function(y){
       y[sapply(y, is.null)] <- NA

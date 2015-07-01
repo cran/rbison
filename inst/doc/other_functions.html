@@ -204,6 +204,7 @@ hr {
 <!--
 %\VignetteEngine{knitr}
 %\VignetteIndexEntry{Other functions}
+%\VignetteEncoding{UTF-8}
 -->
 
 <h1>Other functions available in rbison</h1>
@@ -238,21 +239,21 @@ out$Arctos
 #&gt; $data
 #&gt; Source: local data frame [9 x 22]
 #&gt; 
-#&gt;   id type providerId todayTotals currentWeekTotals resourceId lastUpdated
-#&gt; 1 NA  wms        177         235               256    177,973          NA
-#&gt; 2 NA  wms        177          77                98    177,988          NA
-#&gt; 3 NA  wms        177          77                98  177,13472          NA
-#&gt; 4 NA  wms        177          77                98  177,13468          NA
-#&gt; 5 NA  wms        177          77                98  177,13474          NA
-#&gt; 6 NA  wms        177           0                 0    177,976          NA
-#&gt; 7 NA  wms        177         109               130    177,972          NA
-#&gt; 8 NA  wms        177          77                98    177,971          NA
-#&gt; 9 NA  wms        177          77                98  177,14394          NA
+#&gt;   todayTotals currentWeekTotals providerId resourceId lastUpdated
+#&gt; 1         228              3592        177    177,973          NA
+#&gt; 2         228              3446        177    177,988          NA
+#&gt; 3         335              3447        177  177,13472          NA
+#&gt; 4         308              3368        177  177,13468          NA
+#&gt; 5         284              3323        177  177,13474          NA
+#&gt; 6           0                 0        177    177,976          NA
+#&gt; 7         302              3694        177    177,972          NA
+#&gt; 8         228              3239        177    177,971          NA
+#&gt; 9         329              3541        177  177,14394          NA
 #&gt; Variables not shown: yesterdayTotals (int), lastWeekTotals (int),
 #&gt;   janTotals (int), febTotals (int), marTotals (int), aprTotals (int),
 #&gt;   mayTotals (int), junTotals (int), julTotals (int), augTotals (int),
 #&gt;   sepTotals (int), octTotals (int), novTotals (int), decTotals (int),
-#&gt;   currentMonthTotals (int)
+#&gt;   currentMonthTotals (int), id (lgl), type (chr)
 </code></pre>
 
 <pre><code class="r">out$Harvard_University_Herbaria
@@ -265,14 +266,14 @@ out$Arctos
 #&gt; $data
 #&gt; Source: local data frame [2 x 22]
 #&gt; 
-#&gt;   id type providerId todayTotals currentWeekTotals resourceId lastUpdated
-#&gt; 1 NA  wms        214           0                 0   214,1829          NA
-#&gt; 2 NA  wms        214         188               490   214,1827          NA
+#&gt;   todayTotals currentWeekTotals providerId resourceId lastUpdated
+#&gt; 1           0                 0        214   214,1829          NA
+#&gt; 2         518              4272        214   214,1827          NA
 #&gt; Variables not shown: yesterdayTotals (int), lastWeekTotals (int),
 #&gt;   janTotals (int), febTotals (int), marTotals (int), aprTotals (int),
 #&gt;   mayTotals (int), junTotals (int), julTotals (int), augTotals (int),
 #&gt;   sepTotals (int), octTotals (int), novTotals (int), decTotals (int),
-#&gt;   currentMonthTotals (int)
+#&gt;   currentMonthTotals (int), id (lgl), type (chr)
 </code></pre>
 
 <pre><code class="r">out$ZooKeys
@@ -287,15 +288,15 @@ out$Arctos
 #&gt; $data
 #&gt; Source: local data frame [3 x 22]
 #&gt; 
-#&gt;   id type providerId todayTotals currentWeekTotals resourceId lastUpdated
-#&gt; 1 NA  wms        300          77                98  300,15002          NA
-#&gt; 2 NA  wms        300          77               109 300,200009          NA
-#&gt; 3 NA  wms        300           0                 0  300,13716          NA
+#&gt;   todayTotals currentWeekTotals providerId resourceId lastUpdated
+#&gt; 1         284              3323        300  300,15002          NA
+#&gt; 2         228              3239        300 300,200009          NA
+#&gt; 3           0                 0        300  300,13716          NA
 #&gt; Variables not shown: yesterdayTotals (int), lastWeekTotals (int),
 #&gt;   janTotals (int), febTotals (int), marTotals (int), aprTotals (int),
 #&gt;   mayTotals (int), junTotals (int), julTotals (int), augTotals (int),
 #&gt;   sepTotals (int), octTotals (int), novTotals (int), decTotals (int),
-#&gt;   currentMonthTotals (int)
+#&gt;   currentMonthTotals (int), id (lgl), type (chr)
 </code></pre>
 
 <h2>Data provider information</h2>
@@ -344,14 +345,14 @@ out$National_Herbarium_of_New_South_Wales
 #&gt;          vernacularName    lc_vernacularName
 #&gt; 1  Louisiana black bear Louisiana black bear
 #&gt; 2          grizzly bear         grizzly bear
-#&gt; 3    yellow woolly bear   yellow woolly bear
-#&gt; 4   American black bear  American black bear
-#&gt; 5            black bear           black bear
-#&gt; 6              Sun bear             Sun bear
-#&gt; 7     yellow woollybear    yellow woollybear
-#&gt; 8     banded woollybear    banded woollybear
-#&gt; 9    Asiatic black bear   Asiatic black bear
-#&gt; 10          Kodiak bear          Kodiak bear
+#&gt; 3     yellow woollybear    yellow woollybear
+#&gt; 4     banded woollybear    banded woollybear
+#&gt; 5    Asiatic black bear   Asiatic black bear
+#&gt; 6           Kodiak bear          Kodiak bear
+#&gt; 7      black-ended bear     black-ended bear
+#&gt; 8   American black bear  American black bear
+#&gt; 9            black bear           black bear
+#&gt; 10   yellow woolly bear   yellow woolly bear
 #&gt; 
 #&gt; $highlight
 #&gt; NULL
@@ -372,14 +373,14 @@ out$National_Herbarium_of_New_South_Wales
 #&gt;          vernacularName    lc_vernacularName
 #&gt; 1  Louisiana black bear Louisiana black bear
 #&gt; 2          grizzly bear         grizzly bear
-#&gt; 3    yellow woolly bear   yellow woolly bear
-#&gt; 4   American black bear  American black bear
-#&gt; 5            black bear           black bear
-#&gt; 6              Sun bear             Sun bear
-#&gt; 7     yellow woollybear    yellow woollybear
-#&gt; 8     banded woollybear    banded woollybear
-#&gt; 9    Asiatic black bear   Asiatic black bear
-#&gt; 10          Kodiak bear          Kodiak bear
+#&gt; 3     yellow woollybear    yellow woollybear
+#&gt; 4     banded woollybear    banded woollybear
+#&gt; 5    Asiatic black bear   Asiatic black bear
+#&gt; 6           Kodiak bear          Kodiak bear
+#&gt; 7      black-ended bear     black-ended bear
+#&gt; 8   American black bear  American black bear
+#&gt; 9            black bear           black bear
+#&gt; 10   yellow woolly bear   yellow woolly bear
 #&gt; 
 #&gt; $highlight
 #&gt; NULL
@@ -415,7 +416,7 @@ out$National_Herbarium_of_New_South_Wales
 #&gt;         vernacularName    lc_vernacularName
 #&gt; 1 Louisiana black bear Louisiana black bear
 #&gt; 2         grizzly bear         grizzly bear
-#&gt; 3   yellow woolly bear   yellow woolly bear
+#&gt; 3    yellow woollybear    yellow woollybear
 #&gt; 
 #&gt; $highlight
 #&gt; NULL
@@ -436,14 +437,14 @@ out$National_Herbarium_of_New_South_Wales
 #&gt;          vernacularName
 #&gt; 1  Louisiana black bear
 #&gt; 2          grizzly bear
-#&gt; 3    yellow woolly bear
-#&gt; 4   American black bear
-#&gt; 5            black bear
-#&gt; 6              Sun bear
-#&gt; 7     yellow woollybear
-#&gt; 8     banded woollybear
-#&gt; 9    Asiatic black bear
-#&gt; 10          Kodiak bear
+#&gt; 3     yellow woollybear
+#&gt; 4     banded woollybear
+#&gt; 5    Asiatic black bear
+#&gt; 6           Kodiak bear
+#&gt; 7      black-ended bear
+#&gt; 8   American black bear
+#&gt; 9            black bear
+#&gt; 10   yellow woolly bear
 #&gt; 
 #&gt; $highlight
 #&gt; NULL
@@ -459,7 +460,7 @@ out$National_Herbarium_of_New_South_Wales
 <pre><code class="r">bison_solr(scientificName=&#39;Ursus americanus&#39;, computedStateFips=&#39;New Mexico&#39;,
  fl=&quot;scientificName&quot;, rows=3)
 #&gt; $num_found
-#&gt; [1] 5137
+#&gt; [1] 5370
 #&gt; 
 #&gt; $points
 #&gt;     scientificName
@@ -491,13 +492,13 @@ out$National_Herbarium_of_New_South_Wales
 <pre><code class="r">bison_solr(scientificName=&#39;Ursus americanus&#39;, computedStateFips=&#39;New Mexico&#39;,
  rows=3, fl=&quot;eventDate,scientificName&quot;)
 #&gt; $num_found
-#&gt; [1] 5137
+#&gt; [1] 5370
 #&gt; 
 #&gt; $points
-#&gt;     scientificName         eventDate
-#&gt; 1 Ursus americanus              &lt;NA&gt;
-#&gt; 2 Ursus americanus 1969-09-04T00:00Z
-#&gt; 3 Ursus americanus 1999-06-22T00:00Z
+#&gt;           eventDate   scientificName
+#&gt; 1 2012-05-19T00:00Z Ursus americanus
+#&gt; 2 2012-06-23T00:00Z Ursus americanus
+#&gt; 3 2009-10-17T14:54Z Ursus americanus
 #&gt; 
 #&gt; $highlight
 #&gt; NULL
@@ -522,20 +523,20 @@ out$National_Herbarium_of_New_South_Wales
 
 <pre><code class="r">bison_solr(TSNs = 174670, rows=2)$points[,1:6]
 #&gt;   computedCountyFips providerID catalogNumber basisOfRecord countryCode
-#&gt; 1              06079        407        240245   observation          US
-#&gt; 2              06087        535        168878        fossil          US
+#&gt; 1              12071        407        504817   observation          US
+#&gt; 2              12001        407       1040366   observation          US
 #&gt;   ITISscientificName
 #&gt; 1     Pelecaniformes
 #&gt; 2     Pelecaniformes
 </code></pre>
 
 <pre><code class="r">bison_solr(kingdom = &quot;Plantae&quot;, rows=2)$points[,1:6]
-#&gt;   providerID collectorNumber   catalogNumber basisOfRecord countryCode
-#&gt; 1        220            3256 235754.10773092       unknown          US
-#&gt; 2        114            &lt;NA&gt;             803      specimen          US
-#&gt;   ITISscientificName
-#&gt; 1           Argemone
-#&gt; 2           Argemone
+#&gt;   computedCountyFips providerID catalogNumber basisOfRecord countryCode
+#&gt; 1              41029         25          4495      specimen          US
+#&gt; 2              41033        141      OSC23124      specimen          US
+#&gt;       ITISscientificName
+#&gt; 1 Isothecium myosuroides
+#&gt; 2      Luzula parviflora
 </code></pre>
 
 <p>Using additional solr fields - Faceting</p>
@@ -543,7 +544,7 @@ out$National_Herbarium_of_New_South_Wales
 <pre><code class="r">bison_solr(scientificName=&#39;Helianthus annuus&#39;, rows=0, facet=&#39;true&#39;,
  facet.field=&#39;computedStateFips&#39;)
 #&gt; $num_found
-#&gt; [1] 5108
+#&gt; [1] 5365
 #&gt; 
 #&gt; $points
 #&gt; NULL
@@ -558,57 +559,57 @@ out$National_Herbarium_of_New_South_Wales
 #&gt; $facets$facet_fields
 #&gt; $facets$facet_fields$computedStateFips
 #&gt;    X1   X2
-#&gt; 1  06 1071
-#&gt; 2  20  329
-#&gt; 3  48  329
-#&gt; 4  35  296
-#&gt; 5  08  262
-#&gt; 6  04  156
-#&gt; 7  46  122
-#&gt; 8  29  115
-#&gt; 9  31   99
-#&gt; 10 17   84
-#&gt; 11 49   82
-#&gt; 12 30   79
-#&gt; 13 38   76
-#&gt; 14 41   74
-#&gt; 15 40   73
-#&gt; 16 16   68
-#&gt; 17 56   61
-#&gt; 18 53   60
-#&gt; 19 19   43
-#&gt; 20 26   35
-#&gt; 21 32   32
-#&gt; 22 09   31
-#&gt; 23 22   31
-#&gt; 24 05   30
-#&gt; 25 39   27
-#&gt; 26 27   25
-#&gt; 27 47   25
-#&gt; 28 25   22
+#&gt; 1  06 1272
+#&gt; 2  20  369
+#&gt; 3  48  362
+#&gt; 4  35  311
+#&gt; 5  08  277
+#&gt; 6  04  250
+#&gt; 7  46  127
+#&gt; 8  29  116
+#&gt; 9  30  107
+#&gt; 10 31  102
+#&gt; 11 49   91
+#&gt; 12 17   85
+#&gt; 13 38   79
+#&gt; 14 40   77
+#&gt; 15 16   75
+#&gt; 16 41   75
+#&gt; 17 56   68
+#&gt; 18 53   61
+#&gt; 19 19   44
+#&gt; 20 26   42
+#&gt; 21 32   37
+#&gt; 22 05   33
+#&gt; 23 09   31
+#&gt; 24 22   31
+#&gt; 25 25   28
+#&gt; 26 39   28
+#&gt; 27 27   26
+#&gt; 28 47   25
 #&gt; 29 21   21
-#&gt; 30 12   19
-#&gt; 31 18   19
+#&gt; 30 12   20
+#&gt; 31 18   20
 #&gt; 32 42   19
-#&gt; 33 37   16
-#&gt; 34 36   13
+#&gt; 33 37   18
+#&gt; 34 36   15
 #&gt; 35 45   13
-#&gt; 36 34   10
-#&gt; 37 54    9
-#&gt; 38 23    8
-#&gt; 39 55    7
-#&gt; 40 01    5
-#&gt; 41 24    5
-#&gt; 42 33    5
-#&gt; 43 44    5
-#&gt; 44 02    4
-#&gt; 45 11    4
-#&gt; 46 13    4
-#&gt; 47 28    4
-#&gt; 48 50    4
+#&gt; 36 34   11
+#&gt; 37 54   10
+#&gt; 38 23    9
+#&gt; 39 55    8
+#&gt; 40 24    6
+#&gt; 41 28    6
+#&gt; 42 01    5
+#&gt; 43 13    5
+#&gt; 44 33    5
+#&gt; 45 44    5
+#&gt; 46 50    5
+#&gt; 47 02    4
+#&gt; 48 11    4
 #&gt; 49 15    2
-#&gt; 50 10    1
-#&gt; 51 51    0
+#&gt; 50 51    2
+#&gt; 51 10    1
 #&gt; 52 60    0
 #&gt; 53 66    0
 #&gt; 54 69    0
@@ -632,38 +633,36 @@ out$National_Herbarium_of_New_South_Wales
 <pre><code class="r">bison_solr(scientificName=&#39;Helianthus annuus&#39;, rows=1, hl=&#39;true&#39;,
  hl.fl=&#39;scientificName&#39;)
 #&gt; $num_found
-#&gt; [1] 5108
+#&gt; [1] 5365
 #&gt; 
 #&gt; $points
 #&gt;   computedCountyFips providerID catalogNumber basisOfRecord countryCode
-#&gt; 1              06041        319     UC1176903      specimen          US
-#&gt;   ITISscientificName                                latlon calculatedState
-#&gt; 1  Helianthus annuus -122.56939570846544,38.10733275261566      California
-#&gt;   decimalLongitude year ITIStsn
-#&gt; 1           -122.6 1946   36616
+#&gt; 1              25015        266  CONN00026678      specimen          US
+#&gt;   ITISscientificName             latlon calculatedState decimalLongitude
+#&gt; 1  Helianthus annuus -72.51666,42.36666   Massachusetts        -72.51666
+#&gt;   year ITIStsn
+#&gt; 1 1885   36616
 #&gt;                                                           hierarchy_homonym_string
-#&gt; 1 -202422-846492-846494-846496-846504-846505-18063-846535-35419-35420-36611-36616-
-#&gt;    TSNs calculatedCounty                                       pointPath
-#&gt; 1 36616     Marin County /-122.56939570846544,38.10733275261566/specimen
-#&gt;   computedStateFips providedCounty kingdom decimalLatitude
-#&gt; 1                06          Marin Plantae           38.11
-#&gt;                             collectionID occurrenceID         recordedBy
-#&gt; 1 http://ucjeps.berkeley.edu/consortium/    868133992 John Thomas Howell
-#&gt;   providedScientificName         eventDate
-#&gt; 1   Helianthus annuus L. 1946-09-20T00:00Z
-#&gt;      ownerInstitutionCollectionCode                          provider
-#&gt; 1 Consortium of California Herbaria Consortium of California Herbaria
-#&gt;   ambiguous resourceID stateProvince
-#&gt; 1     FALSE 319,200079    California
+#&gt; 1 -202422-954898-846494-954900-846496-846504-18063-846535-35419-35420-36611-36616-
+#&gt;                  geo  TSNs calculatedCounty                    pointPath
+#&gt; 1 -72.51666 42.36666 36616 Hampshire County /-72.51666,42.36666/specimen
+#&gt;   computedStateFips   providedCounty kingdom decimalLatitude
+#&gt; 1                25 Hampshire County Plantae        42.36666
+#&gt;                         collectionID occurrenceID        recordedBy
+#&gt; 1 http://bgbaseserver.eeb.uconn.edu/    415907013 Wm. M. Shepardson
+#&gt;   providedScientificName ownerInstitutionCollectionCode
+#&gt; 1   Helianthus annuus L.                           CONN
+#&gt;                    provider ambiguous resourceID stateProvince
+#&gt; 1 University of Connecticut     FALSE  266,13544 Massachusetts
 #&gt;                                               ITIScommonName
 #&gt; 1 annual sunflower;common sunflower;sunflower;wild sunflower
-#&gt;      scientificName
-#&gt; 1 Helianthus annuus
+#&gt;      scientificName                      institutionID
+#&gt; 1 Helianthus annuus http://bgbaseserver.eeb.uconn.edu/
 #&gt; 
 #&gt; $highlight
-#&gt; $highlight$`868133992`
-#&gt; $highlight$`868133992`$scientificName
-#&gt; $highlight$`868133992`$scientificName[[1]]
+#&gt; $highlight$`415907013`
+#&gt; $highlight$`415907013`$scientificName
+#&gt; $highlight$`415907013`$scientificName[[1]]
 #&gt; [1] &quot;&lt;em&gt;Helianthus annuus&lt;/em&gt;&quot;
 #&gt; 
 #&gt; 
