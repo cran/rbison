@@ -85,17 +85,17 @@
 #' bison(species="Helianthus annuus", aoibbox = '-111.31,38.81,-110.57,39.21')
 #'
 #' # Taxonomic serial number
-#' bison(tsn=162003)
+#' bison(tsn = 162003)
 #' ## If you don't have tsn's, search for a taxonomic serial number
 #' library('taxize')
 #' poa_tsn <- get_tsn('Poa annua')
-#' bison(tsn=poa_tsn)
+#' bison(tsn = poa_tsn)
 #'
 #' # Curl debugging and other httr options, some of these examples aren't that useful, but
 #' # are given for demonstration purposes
 #' library("httr")
 #' ## get curl verbose output to see what's going on with your request
-#' bison(tsn=162003, count=1, what="points", config=verbose())
+#' bison(tsn = 162003, count=1, what="points", config=verbose())
 #' ## set a timeout so that the call stops after time x, compare 1st to 2nd call
 #' # bison(tsn=162003, count=1, what="points", config=timeout(seconds=1))
 #' # bison(tsn=162003, count=1, what="points", config=timeout(seconds=0.1))
@@ -131,37 +131,38 @@ bison <- function(species=NULL, type="scientific_name", tsn=NULL, start=NULL, co
   stopifnot(is.numeric(count))
   stopifnot(count >= 0)
 
-  if(is.null(species)){
+  if (is.null(species)) {
     type <- NULL
   }
 
   countyFips <- county_handler(county)
 
-  if(!is.null(tsn)){
+  if (!is.null(tsn)) {
     itis <- 'itis'
     tsn <- as.numeric(as.character(tsn))
     stopifnot(is.numeric(tsn))
-  } else { itis <- NULL }
+  } else { 
+    itis <- NULL 
+  }
 
   # check if param names are in the accepted list
   check_params(params)
 
-  url <- "http://bison.usgs.ornl.gov/api/search.json"
   args <- bs_compact(list(species=species,type=type,itis=itis,tsn=tsn,start=start,count=count,
                        countyFips=countyFips,state=state,aoi=aoi,aoibbox=aoibbox,params=params))
-  tt <- GET(url, query=args, ...)
+  tt <- GET(file.path(bison_base(), "api/search.json"), query=args, ...)
   warn_for_status(tt)
-  if(tt$status_code > 201){
+  if (tt$status_code > 201) {
     stopifnot(tt$headers$`content-type` == "text/html;charset=utf-8")
   } else {
     stopifnot(tt$headers$`content-type` == "application/json;charset=UTF-8")
   }
-  if(tt$status_code > 201){
+  if (tt$status_code > 201) {
     res <- NA
   } else {
-    out <- content(tt, as="text")
+    out <- content(tt, as = "text")
     json <- fromJSON(out, FALSE)
-    what <- match.arg(what, choices=c("summary", "counties", "states", "points", "all", "raw", "list"))
+    what <- match.arg(what, choices = c("summary", "counties", "states", "points", "all", "raw", "list"))
     res <- switch(what,
                   summary=bison_data(json, "summary"),
                   all=bison_data(json, "all"),
@@ -189,8 +190,7 @@ check_params <- function(x){
   }
 }
 
-bison_data <- function(input = NULL, datatype="summary")
-{
+bison_data <- function(input = NULL, datatype="summary") {
   if(datatype=='summary'){
     tt <- data.frame(c(input[1], input$occurrences$legend))
     list(summary=tt, states=NULL, counties=NULL, points=NULL)
@@ -214,7 +214,7 @@ bison_data <- function(input = NULL, datatype="summary")
 
 getcounties <- function(x){
   tryx <- tryCatch(x$counties$total, error = function(e) e)
-  if(is(tryx, "simpleError") || is.null(tryx)){
+  if(inherits(tryx, "simpleError") || is.null(tryx)){
     NULL
   } else {
     if(x$counties$total == 0){
@@ -234,7 +234,7 @@ getcounties <- function(x){
 
 getstates <- function(x){
   tryx <- tryCatch(x$states$total, error = function(e) e)
-  if(is(tryx, "simpleError") || is.null(tryx)){
+  if(inherits(tryx, "simpleError") || is.null(tryx)){
     NULL
   } else {
     if(x$states$total == 0){
@@ -249,7 +249,7 @@ getstates <- function(x){
 
 getpoints <- function(x){
   tryx <- tryCatch(x$data, error = function(e) e)
-  if(is(tryx, "simpleError")){
+  if(inherits(tryx, "simpleError")){
     NULL
   } else if(length(x$data) == 0){
       NULL

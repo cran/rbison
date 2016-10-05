@@ -28,7 +28,7 @@
 #' @examples \dontrun{
 #' # All taxa
 #' bison_tax("*:*")
-#' 
+#'
 #' # Some example calls
 #' bison_tax(query="*bear")
 #' bison_tax(query="Helianthus", method="scientificName")
@@ -56,11 +56,11 @@ bison_tax <- function(query, method='vernacularName', exact=FALSE, parsed=TRUE,
   if (!length(method) == 1) {
   	stop("method can only be of length 1")
   }
-  url <- sprintf('http://bison.usgs.ornl.gov/solrstaging/%s/select', method)
-  if (exact) { 
-    qu_ <- paste0('"', query, '"') 
-  } else { 
-    qu_ <- query 
+  url <- sprintf('%s/solr/%s/select', bison_base(), method)
+  if (exact) {
+    qu_ <- paste0('"', query, '"')
+  } else {
+    qu_ <- query
   }
   args <- bs_compact(list(q = qu_, wt = "json", ...))
   tt <- GET(url, query = args, c(config(followlocation = 1), callopts))
@@ -74,7 +74,7 @@ bison_tax <- function(query, method='vernacularName', exact=FALSE, parsed=TRUE,
   )
 
   if (parsed) {
-    data <- rbind_all(lapply(out$response$docs, data.frame, stringsAsFactors = FALSE))
+    data <- bind_rows(lapply(out$response$docs, data.frame, stringsAsFactors = FALSE))
     data$X_version_ <- NULL
     temp$names <- data
   }

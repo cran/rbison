@@ -124,7 +124,6 @@ bison_solr <- function(decimalLatitude=NULL, decimalLongitude=NULL, year=NULL, p
   recordedBy=NULL, occurrenceID=NULL, catalogNumber=NULL, ITIScommonName=NULL,
   kingdom=NULL, callopts=list(), verbose=TRUE, ...)
 {
-  url <- "http://bison.usgs.ornl.gov/solrstaging/occurrences/select/"
   qu <- bs_compact(list(decimalLatitude=decimalLatitude,
                      decimalLongitude=decimalLongitude,
                      year=year,
@@ -148,11 +147,13 @@ bison_solr <- function(decimalLatitude=NULL, decimalLongitude=NULL, year=NULL, p
   for(i in seq_along(qu)){
      stuff[i] <- paste0(names(qu)[[i]],':"', qu[[i]], '"')
   }
-  stuff <- paste0(stuff,collapse="+")
+  stuff <- if (length(stuff) == 0) "*:*" else paste0(stuff,collapse="+")
 
   args <- bs_compact(list(q=stuff, wt="json", ...))
 
-  tt <- GET(url, query=args, c(config(followlocation=1), callopts))
+  tt <- GET(file.path(bison_base(), "solr/occurrences/select/"), 
+            query=args, 
+            c(config(followlocation=1), callopts))
   mssg(verbose, tt$url)
   stop_for_status(tt)
   out <- content(tt, as="text")
@@ -173,11 +174,10 @@ solr_parse_facets <- function(input, parsetype=NULL, concat=',')
 
   # Facet queries
   fqdat <- input$facet_counts$facet_queries
-  if(length(fqdat)==0){
+  if (length(fqdat) == 0) {
     fqout <- NULL
-  } else
-  {
-    fqout <- data.frame(term=names(fqdat), value=do.call(c, fqdat), stringsAsFactors=FALSE)
+  } else {
+    fqout <- data.frame(term = names(fqdat), value=do.call(c, fqdat), stringsAsFactors = FALSE)
   }
   row.names(fqout) <- NULL
 
@@ -240,11 +240,11 @@ solr_parse_highlight <- function(input, parsetype='list', concat=',')
 solr_parse_search <- function(input, parsetype='list', concat=',')
 {
   input <- fromJSON(input, FALSE)
-  if(parsetype=='df'){
+  if (parsetype == 'df') {
     dat <- input$response$docs
     dat2 <- lapply(dat, function(x){
       lapply(x, function(y){
-        if(length(y) > 1 || is(y, "list")){
+        if (length(y) > 1 || inherits(y, "list")) {
           paste(y, collapse=concat)
         } else { y  }
       })

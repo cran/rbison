@@ -1,11 +1,5 @@
 #' Make map to visualize BISON data.
 #'
-#' @importFrom ggplot2 map_data ggplot aes geom_polygon coord_map scale_fill_gradient2 geom_path 
-#' theme_bw labs scale_x_continuous scale_y_continuous guides guide_legend geom_point theme %+%
-#' element_blank
-#' @importFrom grid grid.newpage viewport unit
-#' @importFrom sp point.in.polygon
-#' @import mapproj
 #' @export
 #' @param input Input bison object.
 #' @param tomap One of points (occurrences), county (counts by county), or state
@@ -28,7 +22,7 @@
 
 bisonmap <- function(input = NULL, tomap="points", geom = geom_point,
                      jitter = NULL, customize = NULL) {
-  
+
   UseMethod("bisonmap")
 }
 
@@ -37,11 +31,15 @@ bisonmap <- function(input = NULL, tomap="points", geom = geom_point,
 #' @rdname bisonmap
 bisonmap.bison <- function(input = NULL, tomap="points", geom = geom_point,
                            jitter = NULL, customize = NULL) {
-  
+
   long = lat = group = total = NULL
 
   if (!is.bison(input)) {
     stop("Input is not of class bison")
+  }
+
+  if (is.null(jitter)) {
+    jitter <- position_jitter()
   }
 
   if (tomap == 'points') {
@@ -95,8 +93,8 @@ bisonmap.bison <- function(input = NULL, tomap="points", geom = geom_point,
           theme(legend.position = "top") +
           guides(guide_legend(direction = "horizontal")) +
           customize
-    } else { 
-      stop("tomap must be one of points, county, or state") 
+    } else {
+      stop("tomap must be one of points, county, or state")
     }
 }
 
@@ -106,9 +104,12 @@ bisonmap.bison <- function(input = NULL, tomap="points", geom = geom_point,
 #' @rdname bisonmap
 bisonmap.bison_solr <- function(input = NULL, tomap="points", geom = geom_point,
                                 jitter = NULL, customize = NULL) {
-  
+
   if (!is.bison_solr(input)) {
     stop("Input is not of class bison_solr")
+  }
+  if (is.null(jitter)) {
+    jitter <- position_jitter()
   }
   if (!tomap == 'points') {
     stop("tomap must equal 'points'")
