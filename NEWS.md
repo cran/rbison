@@ -1,3 +1,17 @@
+rbison 0.5.4
+============
+
+### NEW FEATURES
+
+* now using `crul` http client instead of `httr` (#47)
+
+### MINOR IMPROVEMENTS
+
+* put readme images in `tools/` dir as requested by CRAN (#48)
+* tidy docs and code to 80 line width (#49)
+* use markdown docs (#50)
+
+
 rbison 0.5.0
 ============
 
@@ -9,7 +23,7 @@ rbison 0.5.0
 
 ### BUG FIXES
 
-* Fixes for a new `ggplot2` version in mapping function 
+* Fixes for a new `ggplot2` version in mapping function
 `rbison::bisonmap()` (#38)
 
 
@@ -23,7 +37,7 @@ rbison 0.4.8
 * Using `@importFrom` across all package imports.
 * The `query` parameter in `bison_tax()` is now required.
 * Startup message is gone.
-* Changed to new base URLs for BISON APIs. 
+* Changed to new base URLs for BISON APIs.
 
 
 rbison 0.4.5
@@ -32,7 +46,7 @@ rbison 0.4.5
 ### MINOR IMPROVEMENTS
 
 * Fixes for `\donttest`.
-* Removed dependency on `assertthat`. 
+* Removed dependency on `assertthat`.
 * Sentence Case the Title in the DESCRIPTION file!!!!!!
 * Fixed a test for the `bisonmap()` function.
 

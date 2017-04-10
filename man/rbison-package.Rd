@@ -2,8 +2,8 @@
 % Please edit documentation in R/rbison-package.R
 \docType{package}
 \name{rbison-package}
-\alias{rbison}
 \alias{rbison-package}
+\alias{rbison}
 \title{rbison is an interface to the USGS Bison API.}
 \description{
 To get started, see the vignette \code{vignette(package="rbison")}
@@ -15,20 +15,19 @@ To cite rbison, do \code{citation(package='rbison')}
 
 Use the following format to cite data retrieved from BISON:
 
-Biodiversity occurrence data published by: (Accessed through Biodiversity 
+Biodiversity occurrence data published by: (Accessed through Biodiversity
 Information Serving our Nation (BISON), bison.usgs.ornl.gov, YYYY-MM-DD).
 
 For example:
 
-Biodiversity occurrence data published by: Field Museum of Natural History, 
-Museum of Vertebrate Zoology, University of Washington Burke Museum, and 
-University of Turku (Accessed through Biodiversity Information Serving our 
+Biodiversity occurrence data published by: Field Museum of Natural History,
+Museum of Vertebrate Zoology, University of Washington Burke Museum, and
+University of Turku (Accessed through Biodiversity Information Serving our
 Nation (BISON), bison.usgs.ornl.gov, 2013-04-22).
 
-Base URL for the BISON API: \code{https://bison.usgs.gov}
+Base URL for the BISON API: \url{https://bison.usgs.gov}
 }
 \author{
 Scott Chamberlain \email{myrmecocystus@gmail.com}
 }
 \keyword{package}
-

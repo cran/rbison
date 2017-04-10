@@ -67,7 +67,7 @@ out$summary
 bisonmap(out)
 ```
 
-![plot of chunk unnamed-chunk-7](inst/readmeimg/unnamed-chunk-7-1.png)
+![plot of chunk unnamed-chunk-7](tools/unnamed-chunk-7-1.png)
 
 ## All points within the US (including AK and HI)
 
@@ -95,7 +95,7 @@ out$summary
 bisonmap(out)
 ```
 
-![plot of chunk unnamed-chunk-10](inst/readmeimg/unnamed-chunk-10-1.png)
+![plot of chunk unnamed-chunk-10](tools/unnamed-chunk-10-1.png)
 
 ##  All points within the contiguous 48 states
 
@@ -112,8 +112,8 @@ out <- bison(species = "Aquila chrysaetos", count = 600)
 
 ```r
 out$summary
-#>   total observation fossil specimen literature unknown centroid
-#> 1 91482       80582    118      785        556    9441        1
+#>   total observation fossil specimen unknown centroid
+#> 1 84111       82185    102     1811      13        1
 ```
 
 
@@ -124,7 +124,7 @@ out$summary
 bisonmap(out)
 ```
 
-![plot of chunk unnamed-chunk-13](inst/readmeimg/unnamed-chunk-13-1.png)
+![plot of chunk unnamed-chunk-13](tools/unnamed-chunk-13-1.png)
 
 
 ## Map county or state level data
@@ -136,7 +136,7 @@ bisonmap(out)
 bisonmap(out, tomap = "county")
 ```
 
-![plot of chunk unnamed-chunk-14](inst/readmeimg/unnamed-chunk-14-1.png)
+![plot of chunk unnamed-chunk-14](tools/unnamed-chunk-14-1.png)
 
 ### States - using last data call for Aquila
 
@@ -145,7 +145,7 @@ bisonmap(out, tomap = "county")
 bisonmap(out, tomap = "state")
 ```
 
-![plot of chunk unnamed-chunk-15](inst/readmeimg/unnamed-chunk-15-1.png)
+![plot of chunk unnamed-chunk-15](tools/unnamed-chunk-15-1.png)
 
 
 ## BISON SOLR interface
@@ -303,7 +303,7 @@ out <- bison_solr(scientificName = "Ursus americanus", rows = 200)
 bisonmap(out)
 ```
 
-![plot of chunk unnamed-chunk-19](inst/readmeimg/unnamed-chunk-19-1.png)
+![plot of chunk unnamed-chunk-19](tools/unnamed-chunk-19-1.png)
 
 ## Meta
 
@@ -314,4 +314,4 @@ bisonmap(out)
 
 This package is part of a richer suite called [SPOCC Species Occurrence Data](https://github.com/ropensci/spocc), along with several other packages, that provide access to occurrence records from multiple databases. We recommend using SPOCC as the primary R interface to rbison unless your needs are limited to this single source.
 
-[![ropensci_footer](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
+[![ropensci_footer](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)
