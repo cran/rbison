@@ -3,21 +3,21 @@
 #' To get started, see the vignette `vignette(package="rbison")`
 #'
 #'
-#' See <https://bison.usgs.gov/#api> for API docs for the BISON API.
+#' See <https://bison.usgs.gov/doc/api.jsp> for API docs for the BISON API.
 #'
 #' To cite rbison, do `citation(package='rbison')`
 #'
 #' Use the following format to cite data retrieved from BISON:
 #'
 #' Biodiversity occurrence data published by: (Accessed through Biodiversity 
-#' Information Serving our Nation (BISON), bison.usgs.ornl.gov, YYYY-MM-DD).
+#' Information Serving our Nation (BISON), bison.usgs.gov, YYYY-MM-DD).
 #'
 #' For example:
 #'
 #' Biodiversity occurrence data published by: Field Museum of Natural History, 
 #' Museum of Vertebrate Zoology, University of Washington Burke Museum, and 
 #' University of Turku (Accessed through Biodiversity Information Serving our 
-#' Nation (BISON), bison.usgs.ornl.gov, 2013-04-22).
+#' Nation (BISON), bison.usgs.gov, 2013-04-22).
 #' 
 #' Base URL for the BISON API: <https://bison.usgs.gov>
 #'
@@ -38,6 +38,20 @@
 NULL
 
 #' Fips codes for states and counties
+#' 
+#' See 
+#' https://www.census.gov/geo/reference/codes/cou.html and
+#' https://www.census.gov/geo/reference/ansi_statetables.html for 
+#' more information on FIPS codes
+#' 
+#' @format A data frame with 3142 rows and 4 variables:
+#' \describe{
+#'   \item{state}{State name}
+#'   \item{county}{County name}
+#'   \item{fips_state}{State FIPS code}
+#'   \item{fips_county}{County FIPS code}
+#' }
+#' 
 #' @name fips
 #' @docType data
 #' @keywords data

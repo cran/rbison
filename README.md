@@ -9,9 +9,15 @@ rbison
 [![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/rbison?color=E664A4)](https://github.com/metacran/cranlogs.app)
 [![cran version](http://www.r-pkg.org/badges/version/rbison)](https://cran.r-project.org/package=rbison)
 
-Wrapper for the USGS Bison API.
+Wrapper for the [USGS Bison](https://bison.usgs.gov) API
 
-## Info
+## Description
+
+USGS Biodiversity Information Serving Our Nation (BISON) is a web-based federal mapping resource that provides access to georeferenced (those with latitude and longitude coordinates) and non-georeferenced data describing the occurrence or presence of terrestrial and aquatic species recorded or collected by a person (or instrument) at a specific time in the United States and its Territories. Each record in a species occurrence dataset available in BISON will typically consist of a scientific name (genus and specific epithet), a date, and one or more geographic references such as a state name, county name, and/or decimal latitude and longitude coordinates. In addition to these typical data fields, species occurrence datasets often include many other data fields that describe each species occurrence event in more detail.
+
+`rbison` allows one to pull species occurrence data from these datasets, inspect species occurance summaries, and then map species occurance within the US, within the contiguous 48 states, and/or at county or state level.
+
+Current data providers for BISON can be found at <https://bison.usgs.gov/providers.jsp>
 
 See <https://bison.usgs.gov/#api> for API docs for the BISON API.
 
@@ -56,8 +62,8 @@ out <- bison(species = "Phocoenoides dalli dalli", count = 10)
 
 ```r
 out$summary
-#>   total specimen
-#> 1     7        7
+#>   specimen specimen.1
+#> 1        7          7
 ```
 
 ### map occurrences
@@ -75,7 +81,7 @@ bisonmap(out)
 
 
 ```r
-out <- bison(species = "Bison bison", count = 600)
+out <- bison(species = "Bison bison", count = 300)
 ```
 
 
@@ -84,8 +90,12 @@ out <- bison(species = "Bison bison", count = 600)
 
 ```r
 out$summary
-#>   total observation fossil specimen unknown centroid
-#> 1  1217         252    162      796       7        1
+#>   occurrences.legend.fossil occurrences.legend.observation
+#> 1                       359                            927
+#>   occurrences.legend.centroid occurrences.legend.specimen
+#> 1                           1                         946
+#>   occurrences.legend.unknown fossil observation centroid specimen unknown
+#> 1                          6    359         927        1      946       6
 ```
 
 ### map occurrences
@@ -103,7 +113,7 @@ bisonmap(out)
 
 
 ```r
-out <- bison(species = "Aquila chrysaetos", count = 600)
+out <- bison(species = "Aquila chrysaetos", count = 300)
 ```
 
 
@@ -112,8 +122,14 @@ out <- bison(species = "Aquila chrysaetos", count = 600)
 
 ```r
 out$summary
-#>   total observation fossil specimen unknown centroid
-#> 1 84111       82185    102     1811      13        1
+#>   occurrences.legend.literature occurrences.legend.fossil
+#> 1                          1641                       642
+#>   occurrences.legend.observation occurrences.legend.centroid
+#> 1                         128207                           1
+#>   occurrences.legend.unknown occurrences.legend.specimen literature fossil
+#> 1                       9734                        1899       1641    642
+#>   observation centroid unknown specimen
+#> 1      128207        1    9734     1899
 ```
 
 
@@ -158,20 +174,20 @@ The taxa service searches for and gives back taxonomic names
 ```r
 bison_tax(query = "*bear")
 #> $numFound
-#> [1] 12
+#> [1] 48
 #> 
 #> $names
 #>       lc_vernacularName       vernacularName
-#> 1   American black bear  American black bear
-#> 2    Asiatic black bear   Asiatic black bear
-#> 3     banded woollybear    banded woollybear
-#> 4            black bear           black bear
-#> 5      black-ended bear     black-ended bear
-#> 6            brown bear           brown bear
-#> 7          grizzly bear         grizzly bear
-#> 8           Kodiak bear          Kodiak bear
-#> 9  Louisiana black bear Louisiana black bear
-#> 10             Sun bear             Sun bear
+#> 1  Louisiana black bear Louisiana black bear
+#> 2            Sloth Bear           Sloth Bear
+#> 3          grizzly bear         grizzly bear
+#> 4              bear oak             bear oak
+#> 5     yellow woollybear    yellow woollybear
+#> 6            bear daisy           bear daisy
+#> 7     banded woollybear    banded woollybear
+#> 8    Asiatic black bear   Asiatic black bear
+#> 9           Kodiak bear          Kodiak bear
+#> 10     black-ended bear     black-ended bear
 #> 
 #> $highlight
 #> NULL
@@ -186,20 +202,20 @@ And you can search by scientific name
 ```r
 bison_tax(query = "Helianthus*", method = "scientificName")
 #> $numFound
-#> [1] 215
+#> [1] 212
 #> 
 #> $names
 #>                       scientificName
-#> 1  Helianthus divaricatus latifolius
-#> 2             Helianthus decapetalus
-#> 3                Helianthus ambiguus
-#> 4             Helianthus dowellianus
-#> 5               Helianthus luxurians
-#> 6               Helianthus anomalus 
-#> 7            Helianthus longifolius 
-#> 8               Helianthus arenicola
-#> 9                Helianthus parishii
-#> 10             Helianthus floridanus
+#> 1              Discoaster helianthus
+#> 2  Helianthus divaricatus latifolius
+#> 3             Helianthus decapetalus
+#> 4                Helianthus ambiguus
+#> 5             Helianthus dowellianus
+#> 6               Helianthus luxurians
+#> 7               Helianthus arenicola
+#> 8              Helianthus atrorubens
+#> 9               Helianthus frondosus
+#> 10   Helianthus nuttallii canadensis
 #> 
 #> $highlight
 #> NULL
@@ -217,82 +233,20 @@ Searching for data and looking at output
 
 
 ```r
-bison_solr(scientificName = "Ursus americanus", state_code = "New Mexico", rows = 50, fl = "eventDate,scientificName")
-#> $num_found
-#> [1] 4801
-#> 
-#> $points
-#>            eventDate   scientificName
-#> 1  1995-05-28T00:00Z Ursus americanus
-#> 2               <NA> Ursus americanus
-#> 3  1973-09-19T00:00Z Ursus americanus
-#> 4  1988-06-26T00:00Z Ursus americanus
-#> 5  2012-09-24T00:00Z Ursus americanus
-#> 6  2015-05-05T00:00Z Ursus americanus
-#> 7  1996-05-28T00:00Z Ursus americanus
-#> 8  2013-11-25T00:00Z Ursus americanus
-#> 9               <NA> Ursus americanus
-#> 10              <NA> Ursus americanus
-#> 11              <NA> Ursus americanus
-#> 12              <NA> Ursus americanus
-#> 13              <NA> Ursus americanus
-#> 14 2009-06-07T00:00Z Ursus americanus
-#> 15 1958-09-11T00:00Z Ursus americanus
-#> 16 1951-10-14T00:00Z Ursus americanus
-#> 17              <NA> Ursus americanus
-#> 18              <NA> Ursus americanus
-#> 19              <NA> Ursus americanus
-#> 20              <NA> Ursus americanus
-#> 21              <NA> Ursus americanus
-#> 22              <NA> Ursus americanus
-#> 23              <NA> Ursus americanus
-#> 24              <NA> Ursus americanus
-#> 25              <NA> Ursus americanus
-#> 26 2012-10-27T00:00Z Ursus americanus
-#> 27 1955-08-27T00:00Z Ursus americanus
-#> 28 1950-09-04T00:00Z Ursus americanus
-#> 29 1954-12-28T00:00Z Ursus americanus
-#> 30 1955-08-27T00:00Z Ursus americanus
-#> 31 1954-10-13T00:00Z Ursus americanus
-#> 32 1953-10-22T00:00Z Ursus americanus
-#> 33 1957-01-14T00:00Z Ursus americanus
-#> 34 1953-10-15T00:00Z Ursus americanus
-#> 35 1954-11-12T00:00Z Ursus americanus
-#> 36 1955-03-01T00:00Z Ursus americanus
-#> 37 1956-05-24T00:00Z Ursus americanus
-#> 38 1958-06-06T00:00Z Ursus americanus
-#> 39 1958-08-27T00:00Z Ursus americanus
-#> 40 1967-06-13T00:00Z Ursus americanus
-#> 41              <NA> Ursus americanus
-#> 42 2012-05-30T16:38Z Ursus americanus
-#> 43              <NA> Ursus americanus
-#> 44 2012-08-30T00:00Z Ursus americanus
-#> 45 1995-11-25T00:00Z Ursus americanus
-#> 46              <NA> Ursus americanus
-#> 47              <NA> Ursus americanus
-#> 48              <NA> Ursus americanus
-#> 49 2015-06-04T00:00Z Ursus americanus
-#> 50 1931-10-21T00:00Z Ursus americanus
-#> 
-#> $highlight
-#> NULL
-#> 
-#> $facets
-#> $facets$facet_queries
-#> NULL
-#> 
-#> $facets$facet_fields
-#> NULL
-#> 
-#> $facets$facet_dates
-#> NULL
-#> 
-#> $facets$facet_ranges
-#> NULL
-#> 
-#> 
-#> attr(,"class")
-#> [1] "bison_solr"
+x <- bison_solr(scientificName = "Ursus americanus", rows = 10, 
+    fl = "scientificName,decimalLongitude,decimalLatitude")
+x$points
+#>    decimalLongitude   scientificName decimalLatitude
+#> 1          -92.8370 Ursus americanus        48.48344
+#> 2         -150.5500 Ursus americanus        59.59000
+#> 3         -150.5500 Ursus americanus        59.59000
+#> 4         -149.6600 Ursus americanus        59.83000
+#> 5         -124.0676 Ursus americanus        46.28618
+#> 6         -121.5178 Ursus americanus        41.75872
+#> 7         -143.4417 Ursus americanus        64.95393
+#> 8         -109.6747 Ursus americanus        34.98864
+#> 9         -123.4106 Ursus americanus        47.78021
+#> 10        -116.1590 Ursus americanus        33.98085
 ```
 
 Mapping the data
@@ -310,7 +264,7 @@ bisonmap(out)
 * Please [report any issues or bugs](https://github.com/ropensci/rbison/issues).
 * License: MIT
 * Get citation information for `rbison` in R doing `citation(package = 'rbison')`
-* Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
+* Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
 
 This package is part of a richer suite called [SPOCC Species Occurrence Data](https://github.com/ropensci/spocc), along with several other packages, that provide access to occurrence records from multiple databases. We recommend using SPOCC as the primary R interface to rbison unless your needs are limited to this single source.
 
