@@ -5,8 +5,10 @@
 #' @param type (character) Type, one of scientific_name or common_name.
 #' @param tsn (numeric) Specifies the TSN to query by. If you supply a tsn it 
 #' doesn't make sense to supply a species name as well. Example:162003.
-#' @param start (numeric) Record to start at. Default: 0
-#' @param count (numeric) Number of records to return. Default: 0. Max: 500
+#' @param start (numeric) Record to start at. Default: 0. See "Pagination" 
+#' in Details.
+#' @param count (numeric) Number of records to return. Default: 25.
+#' See "Pagination" in Details.
 #' @param countyFips (character) Specifies the county fips code to 
 #' geographically constrain the search to one county. Character must be 
 #' supplied as a number starting with zero may lose the zero. Eg: "49015".
@@ -37,25 +39,27 @@
 #' kingdom, ITIStsn, centroid, higherGeographyID, computedCountyFips,
 #' providedCounty, calculatedCounty, stateProvince, calculatedState, 
 #' countryCode. See examples.
-#' @param what What to return?  One of 'all', 'summary', 'points', 'counties', 
-#' 'states', 'raw', or 'list'. All data is returned from the BISON API, but 
-#' this parameter lets you select just the parts you want, and the rest is 
-#' discarded before returning the result to you.
 #' @param ... Further args passed on to [crul::HttpClient()]. See examples.
 #'
 #' @seealso [bison_solr()] [bison_tax()]
 #' 
 #' @references <https://bison.usgs.gov/#opensearch>
+#' 
+#' @section Pagination:
+#' `bison()` paginates internally for you on the `count` parameter, so that 
+#' for example, if you request 2000 records, then we'll do two requests to 
+#' get all those records. If you request for example 50 records, then we 
+#' just do one request. 
 #'
 #' @examples \dontrun{
-#' bison(species="Bison bison", count=50, what='summary')
-#' bison(species="Bison bison", count=50, what='points')
-#' bison(species="Bison bison", count=50, what='counties')
-#' bison(species="Bison bison", count=50, what='states')
-#' bison(species="Bison bison", count=50, what='raw')
-#' bison(species="Bison bison", count=50, what='list')
+#' bison(species="Bison bison", count=50)
+#' 
+#' # lots of results
+#' res <- bison(species="Bison bison", count=2000)
+#' res$summary
+#' NROW(res$points)
 #'
-#' out <- bison(species="Bison bison", count=50) # by default gets 10 results
+#' out <- bison(species="Helianthus annuus", count=300)
 #' out$summary # see summary
 #' out$counties # see county data
 #' out$states # see state data
@@ -64,7 +68,7 @@
 #' bisonmap(out, tomap = "state")
 #'
 #' # Search for a common name
-#' bison(species="Tufted Titmouse", type="common_name", what='summary')
+#' bison(species="Tufted Titmouse", type="common_name")
 #'
 #' # Constrain search to a certain county, 49015 is Emery County in Utah
 #' bison(species="Helianthus annuus", countyFips = "49015")
@@ -72,7 +76,7 @@
 #' # Constrain search to a certain county, specifying county name instead of 
 #' # code
 #' bison(species="Helianthus annuus", county = "Los Angeles")
-#' bison(species="Helianthus annuus", county = "Los")
+#' # bison(species="Helianthus annuus", county = "Los")
 #'
 #' # Constrain search to a certain aoi, which turns out to be Emery County, 
 #' # Utah as well
@@ -98,13 +102,13 @@
 #' # Curl debugging and some of these examples aren't 
 #' # that useful, but are given for demonstration purposes
 #' ## get curl verbose output to see what's going on with your request
-#' bison(tsn = 162003, count=1, what="points", verbose = TRUE)
+#' bison(tsn = 162003, count=1, verbose = TRUE)
 #' ## set a timeout so that the call stops after time x, compare 1st to 2nd call
-#' # bison(tsn=162003, count=1, what="points", timeout_ms = 1)
+#' # bison(tsn=162003, count=1, timeout_ms = 1)
 #' ## set cookies
-#' bison(tsn=162003, count=1, what="points", cookie = "a=1;b=2")
+#' bison(tsn=162003, count=1, cookie = "a=1;b=2")
 #' ## user agent and verbose 
-#' bison(tsn=162003, count=1, what="points", useragent = "rbison", 
+#' bison(tsn=162003, count=1, useragent = "rbison", 
 #'   verbose = TRUE)
 #'
 #' # Params - the params function accepts a number of search terms
@@ -131,16 +135,19 @@
 
 bison <- function(species=NULL, type="scientific_name", tsn=NULL, start=0, 
   count=25, countyFips=NULL, county=NULL, state=NULL, aoi=NULL, aoibbox=NULL, 
-  params=NULL, what='all', ...) {
+  params=NULL, ...) {
+
+  calls <- names(sapply(match.call(), deparse))[-1]
+  calls_vec <- c("what") %in% calls
+  if (any(calls_vec)) {
+    stop("The parameter 'what' has been removed. see `?bison`", 
+      call. = FALSE)
+  }
   
   stopifnot(is.numeric(count))
   stopifnot(count >= 0)
-  stopifnot(count <= 500)
-
-  if (is.null(species)) {
-    type <- NULL
-  }
-
+  # stopifnot(count <= 500)
+  if (is.null(species)) type <- NULL
   countyFips <- county_handler(county)
 
   if (!is.null(tsn)) {
@@ -155,41 +162,70 @@ bison <- function(species=NULL, type="scientific_name", tsn=NULL, start=0,
   check_params(params)
 
   args <- bs_compact(
-    list(species=species,type=type,itis=itis,tsn=tsn,start=start,count=count,
-         countyFips=countyFips,state=state,aoi=aoi,aoibbox=aoibbox,params=params
-  ))
+    list(species=species, type=type, itis=itis, tsn=tsn, start=start,
+      count=count, countyFips=countyFips, state=state, aoi=aoi,
+      aoibbox=aoibbox, params=params))
   
-  cli <- crul::HttpClient$new(url = file.path(bison_base(), "api/search.json"))
-  tt <- cli$get(query = args, ...)
-  tt$raise_for_status()
-  
-  # tt <- GET(file.path(bison_base(), "api/search.json"), query=args, ...)
-  # warn_for_status(tt)
+  if (count > 1000) {
+    if (args$count > 1000) args$count <- 1000
+    iter <- 0
+    sumreturned <- 0
+    numreturned <- 0
+    outout <- list()
+    while(sumreturned < count) {
+      iter <- iter + 1
+      tmp <- bison_GET(file.path(bison_base(), "api/search.json"), args, ...)
+      # if no results, assign numreturned var with 0
+      if (length(tmp$data) == 0) {
+        numreturned <- 0
+      } else {
+        numreturned <- length(tmp$data)
+      }
+      sumreturned <- sumreturned + numreturned
+      # if less results than maximum
+      if ((numreturned > 0) && (numreturned < 1000)) {
+        # update limit for metadata before exiting
+        count <- numreturned
+        args$count <- count
+      }
+      if (sumreturned < count) {
+        # update args for next query
+        args$start <- args$start + numreturned
+        args$count <- min(c(1000, count - sumreturned))
+      }
+      outout[[iter]] <- tmp
+    }
+    pts <- dplyr::bind_rows(lapply(outout, getpoints))
+    summary <- outout[[1]]$occurrences$legend
+    counties <- getcounties(outout[[1]])
+    states <- getstates(outout[[1]])
+    tt <- list(summary=summary, states=states, counties=counties, points=pts)
+  } else {
+    tt <- bison_data(
+      bison_GET(file.path(bison_base(), "api/search.json"), args, ...)
+    )
+  }
+
+  structure(tt, class = "bison")
+}
+
+bison_GET <- function(url, args = list(), ...) {
+  cli <- crul::HttpClient$new(url = url, opts = list(...))
+  tt <- cli$get(query = args)
+  tt$raise_for_status()  
   if (tt$status_code > 201) {
     stopifnot(tt$headers$`content-type` == "text/html;charset=utf-8")
+    warning("no results found")
   } else {
     stopifnot(tt$headers$`content-type` == "application/json;charset=UTF-8")
   }
-  
   if (tt$status_code > 201) {
-    res <- NA
+    return(NA)
   } else {
     out <- tt$parse("UTF-8")
-    #out <- content(tt, as = "text")
-    json <- jsonlite::fromJSON(out, FALSE)
-    what <- match.arg(what, choices = c("summary", "counties", "states", 
-                                        "points", "all", "raw", "list"))
-    res <- switch(
-      what,
-      summary = bison_data(json, "summary"),
-      all = bison_data(json, "all"),
-      counties = bison_data(json, "counties"),
-      states = bison_data(json, "states"),
-      points = bison_data(json, "points"),
-      raw = out, list = json
-    )
+    jsonlite::fromJSON(out, FALSE)
+    # return(json$occurrences$legend)
   }
-  structure(res, class = "bison")
 }
 
 check_params <- function(x) {
@@ -210,26 +246,12 @@ check_params <- function(x) {
   }
 }
 
-bison_data <- function(input = NULL, datatype="summary") {
-  if(datatype=='summary'){
-    tt <- data.frame(c(input[1], input$occurrences$legend))
-    list(summary=tt, states=NULL, counties=NULL, points=NULL)
-  } else if(datatype=="counties"){
-    tt <- getcounties(input)
-    list(summary=NULL, states=NULL, counties=tt, points=NULL)
-  } else if(datatype=="states"){
-    tt <- getstates(input)
-    list(summary=NULL, states=tt, counties=NULL, points=NULL)
-  } else if(datatype=="points"){
-    tt <- getpoints(input)
-    list(summary=NULL, states=NULL, counties=NULL, points=tt)
-  } else if(datatype=="all"){
-    summary=data.frame(c(input[1], input$occurrences$legend))
-    counties=getcounties(input)
-    states=getstates(input)
-    points=getpoints(input)
-    list(summary=summary, states=states, counties=counties, points=points)
-  }
+bison_data <- function(input) {
+  summary = input$occurrences$legend
+  counties = getcounties(input)
+  states = getstates(input)
+  points = getpoints(input)
+  list(summary=summary, states=states, counties=counties, points=points)
 }
 
 getcounties <- function(x){
@@ -240,13 +262,12 @@ getcounties <- function(x){
     if(x$counties$total == 0){
       NULL
     } else {
-      if(class(x$counties$data[[1]])=="character"){
-        df <- ldply(x$counties$data)
-      } else
-      {
+      if(is.character(x$counties$data) || length(x$counties$data) == 0){
+        df <- data.frame(NULL)
+      } else {
         df <- ldply(x$counties$data, function(y) data.frame(y))
+        names(df)[c(1,3)] <- c("record_id","county_name")
       }
-      names(df)[c(1,3)] <- c("record_id","county_name")
       return(df)
     }
   }
@@ -269,23 +290,26 @@ getstates <- function(x){
 
 getpoints <- function(x){
   tryx <- tryCatch(x$data, error = function(e) e)
-  if(inherits(tryx, "simpleError")){
+  if (inherits(tryx, "simpleError")) {
     NULL
-  } else if(length(x$data) == 0){
-      NULL
+  } else if (length(x$data) == 0) {
+    NULL
   } else {
-    withlatlong <- x$data[sapply(x$data, length, USE.NAMES=FALSE) == 8]
-    data_out <- ldply(withlatlong, function(y){
-      y[sapply(y, is.null)] <- NA
-      data.frame(
-        y[c("name","decimalLongitude","decimalLatitude","occurrenceID",
-            "provider","basis","common_name","geo")], stringsAsFactors=FALSE)
-    })
-    data_out$decimalLongitude <- 
-      as.numeric(as.character(data_out$decimalLongitude))
-    data_out$decimalLatitude <- 
-      as.numeric(as.character(data_out$decimalLatitude))
-    return(data_out)
+    df <- data.table::setDF(
+      data.table::rbindlist(x$data, use.names = TRUE, fill = TRUE))
+    if ('decimalLongitude' %in% names(df)) {
+      df$decimalLongitude <- 
+        as.numeric(as.character(df$decimalLongitude))
+    }
+    if ('decimalLatitude' %in% names(df)) {
+      df$decimalLatitude <- 
+        as.numeric(as.character(df$decimalLatitude))
+    }
+    nms <- c("name","decimalLongitude","decimalLatitude","occurrenceID",
+        "provider","basis","common_name","geo")
+    nms_use <- nms[nms %in% names(df)]
+    df <- df[, nms_use]
+    return(df)
   }
 }
 

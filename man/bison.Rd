@@ -4,9 +4,9 @@
 \alias{bison}
 \title{Search for and collect data from the USGS Bison API.}
 \usage{
-bison(species = NULL, type = "scientific_name", tsn = NULL, start = 0,
-  count = 25, countyFips = NULL, county = NULL, state = NULL,
-  aoi = NULL, aoibbox = NULL, params = NULL, what = "all", ...)
+bison(species = NULL, type = "scientific_name", tsn = NULL,
+  start = 0, count = 25, countyFips = NULL, county = NULL,
+  state = NULL, aoi = NULL, aoibbox = NULL, params = NULL, ...)
 }
 \arguments{
 \item{species}{(character) A species name.}
@@ -16,9 +16,11 @@ bison(species = NULL, type = "scientific_name", tsn = NULL, start = 0,
 \item{tsn}{(numeric) Specifies the TSN to query by. If you supply a tsn it
 doesn't make sense to supply a species name as well. Example:162003.}
 
-\item{start}{(numeric) Record to start at. Default: 0}
+\item{start}{(numeric) Record to start at. Default: 0. See "Pagination"
+in Details.}
 
-\item{count}{(numeric) Number of records to return. Default: 0. Max: 500}
+\item{count}{(numeric) Number of records to return. Default: 25.
+See "Pagination" in Details.}
 
 \item{countyFips}{(character) Specifies the county fips code to
 geographically constrain the search to one county. Character must be
@@ -56,26 +58,29 @@ kingdom, ITIStsn, centroid, higherGeographyID, computedCountyFips,
 providedCounty, calculatedCounty, stateProvince, calculatedState,
 countryCode. See examples.}
 
-\item{what}{What to return?  One of 'all', 'summary', 'points', 'counties',
-'states', 'raw', or 'list'. All data is returned from the BISON API, but
-this parameter lets you select just the parts you want, and the rest is
-discarded before returning the result to you.}
-
 \item{...}{Further args passed on to \code{\link[crul:HttpClient]{crul::HttpClient()}}. See examples.}
 }
 \description{
 Search for and collect data from the USGS Bison API.
 }
+\section{Pagination}{
+
+\code{bison()} paginates internally for you on the \code{count} parameter, so that
+for example, if you request 2000 records, then we'll do two requests to
+get all those records. If you request for example 50 records, then we
+just do one request.
+}
+
 \examples{
 \dontrun{
-bison(species="Bison bison", count=50, what='summary')
-bison(species="Bison bison", count=50, what='points')
-bison(species="Bison bison", count=50, what='counties')
-bison(species="Bison bison", count=50, what='states')
-bison(species="Bison bison", count=50, what='raw')
-bison(species="Bison bison", count=50, what='list')
+bison(species="Bison bison", count=50)
 
-out <- bison(species="Bison bison", count=50) # by default gets 10 results
+# lots of results
+res <- bison(species="Bison bison", count=2000)
+res$summary
+NROW(res$points)
+
+out <- bison(species="Helianthus annuus", count=300)
 out$summary # see summary
 out$counties # see county data
 out$states # see state data
@@ -84,7 +89,7 @@ bisonmap(out, tomap = "county")
 bisonmap(out, tomap = "state")
 
 # Search for a common name
-bison(species="Tufted Titmouse", type="common_name", what='summary')
+bison(species="Tufted Titmouse", type="common_name")
 
 # Constrain search to a certain county, 49015 is Emery County in Utah
 bison(species="Helianthus annuus", countyFips = "49015")
@@ -92,7 +97,7 @@ bison(species="Helianthus annuus", countyFips = "49015")
 # Constrain search to a certain county, specifying county name instead of 
 # code
 bison(species="Helianthus annuus", county = "Los Angeles")
-bison(species="Helianthus annuus", county = "Los")
+# bison(species="Helianthus annuus", county = "Los")
 
 # Constrain search to a certain aoi, which turns out to be Emery County, 
 # Utah as well
@@ -118,13 +123,13 @@ bison(tsn = poa_tsn)
 # Curl debugging and some of these examples aren't 
 # that useful, but are given for demonstration purposes
 ## get curl verbose output to see what's going on with your request
-bison(tsn = 162003, count=1, what="points", verbose = TRUE)
+bison(tsn = 162003, count=1, verbose = TRUE)
 ## set a timeout so that the call stops after time x, compare 1st to 2nd call
-# bison(tsn=162003, count=1, what="points", timeout_ms = 1)
+# bison(tsn=162003, count=1, timeout_ms = 1)
 ## set cookies
-bison(tsn=162003, count=1, what="points", cookie = "a=1;b=2")
+bison(tsn=162003, count=1, cookie = "a=1;b=2")
 ## user agent and verbose 
-bison(tsn=162003, count=1, what="points", useragent = "rbison", 
+bison(tsn=162003, count=1, useragent = "rbison", 
   verbose = TRUE)
 
 # Params - the params function accepts a number of search terms

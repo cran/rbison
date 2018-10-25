@@ -3,6 +3,7 @@ rbison
 
 
 
+[![cran checks](https://cranchecks.info/badges/worst/rbison)](https://cranchecks.info/pkgs/rbison)
 [![Build Status](https://api.travis-ci.org/ropensci/rbison.png)](https://travis-ci.org/ropensci/rbison)
 [![Build status](https://ci.appveyor.com/api/projects/status/cba5mqg33hakour1?svg=true)](https://ci.appveyor.com/project/sckott/rbison)
 [![codecov.io](https://codecov.io/github/ropensci/rbison/coverage.svg?branch=master)](https://codecov.io/github/ropensci/rbison?branch=master)
@@ -13,13 +14,13 @@ Wrapper for the [USGS Bison](https://bison.usgs.gov) API
 
 ## Description
 
-USGS Biodiversity Information Serving Our Nation (BISON) is a web-based federal mapping resource that provides access to georeferenced (those with latitude and longitude coordinates) and non-georeferenced data describing the occurrence or presence of terrestrial and aquatic species recorded or collected by a person (or instrument) at a specific time in the United States and its Territories. Each record in a species occurrence dataset available in BISON will typically consist of a scientific name (genus and specific epithet), a date, and one or more geographic references such as a state name, county name, and/or decimal latitude and longitude coordinates. In addition to these typical data fields, species occurrence datasets often include many other data fields that describe each species occurrence event in more detail.
+USGS Biodiversity Information Serving Our Nation (BISON) is a web-based federal mapping resource that provides access to georeferenced (those with latitude and longitude coordinates) and non-georeferenced data describing the occurrence or presence of terrestrial and aquatic species recorded or collected by a person (or instrument) at a specific time in the United States, U.S. Territories, U.S. Marine Exclusive Economic Zones (EEZs), and Canada. Each record in a species occurrence dataset available in BISON will typically consist of a scientific name (genus and specific epithet), a date, and one or more geographic references such as a state name, county name, and/or decimal latitude and longitude coordinates. In addition to these typical data fields, species occurrence datasets often include many other data fields that describe each species occurrence event in more detail.
 
 `rbison` allows one to pull species occurrence data from these datasets, inspect species occurance summaries, and then map species occurance within the US, within the contiguous 48 states, and/or at county or state level.
 
 Current data providers for BISON can be found at <https://bison.usgs.gov/providers.jsp>
 
-See <https://bison.usgs.gov/#api> for API docs for the BISON API.
+See <https://bison.usgs.gov/doc/api.jsp> for API docs for the BISON API.
 
 
 ## Installation
@@ -62,8 +63,8 @@ out <- bison(species = "Phocoenoides dalli dalli", count = 10)
 
 ```r
 out$summary
-#>   specimen specimen.1
-#> 1        7          7
+#> $specimen
+#> [1] 7
 ```
 
 ### map occurrences
@@ -81,7 +82,7 @@ bisonmap(out)
 
 
 ```r
-out <- bison(species = "Bison bison", count = 300)
+out <- bison(species = "Cyanocitta stelleri", count = 500)
 ```
 
 
@@ -90,12 +91,20 @@ out <- bison(species = "Bison bison", count = 300)
 
 ```r
 out$summary
-#>   occurrences.legend.fossil occurrences.legend.observation
-#> 1                       359                            927
-#>   occurrences.legend.centroid occurrences.legend.specimen
-#> 1                           1                         946
-#>   occurrences.legend.unknown fossil observation centroid specimen unknown
-#> 1                          6    359         927        1      946       6
+#> $fossil
+#> [1] 2
+#> 
+#> $observation
+#> [1] 566346
+#> 
+#> $centroid
+#> [1] 1
+#> 
+#> $specimen
+#> [1] 3294
+#> 
+#> $unknown
+#> [1] 208
 ```
 
 ### map occurrences
@@ -122,14 +131,23 @@ out <- bison(species = "Aquila chrysaetos", count = 300)
 
 ```r
 out$summary
-#>   occurrences.legend.literature occurrences.legend.fossil
-#> 1                          1641                       642
-#>   occurrences.legend.observation occurrences.legend.centroid
-#> 1                         128207                           1
-#>   occurrences.legend.unknown occurrences.legend.specimen literature fossil
-#> 1                       9734                        1899       1641    642
-#>   observation centroid unknown specimen
-#> 1      128207        1    9734     1899
+#> $literature
+#> [1] 1641
+#> 
+#> $fossil
+#> [1] 642
+#> 
+#> $observation
+#> [1] 128811
+#> 
+#> $centroid
+#> [1] 1
+#> 
+#> $unknown
+#> [1] 9734
+#> 
+#> $specimen
+#> [1] 1899
 ```
 
 
@@ -233,27 +251,27 @@ Searching for data and looking at output
 
 
 ```r
-x <- bison_solr(scientificName = "Ursus americanus", rows = 10, 
+x <- bison_solr(scientificName = "Aquila chrysaetos", rows = 10, 
     fl = "scientificName,decimalLongitude,decimalLatitude")
 x$points
-#>    decimalLongitude   scientificName decimalLatitude
-#> 1          -92.8370 Ursus americanus        48.48344
-#> 2         -150.5500 Ursus americanus        59.59000
-#> 3         -150.5500 Ursus americanus        59.59000
-#> 4         -149.6600 Ursus americanus        59.83000
-#> 5         -124.0676 Ursus americanus        46.28618
-#> 6         -121.5178 Ursus americanus        41.75872
-#> 7         -143.4417 Ursus americanus        64.95393
-#> 8         -109.6747 Ursus americanus        34.98864
-#> 9         -123.4106 Ursus americanus        47.78021
-#> 10        -116.1590 Ursus americanus        33.98085
+#>    decimalLongitude    scientificName decimalLatitude
+#> 1         -117.6185 Aquila chrysaetos        33.71447
+#> 2         -117.6185 Aquila chrysaetos        33.71447
+#> 3         -117.6185 Aquila chrysaetos        33.71447
+#> 4         -117.6185 Aquila chrysaetos        33.70987
+#> 5         -117.6014 Aquila chrysaetos        33.65099
+#> 6         -117.4997 Aquila chrysaetos        33.68344
+#> 7         -117.4544 Aquila chrysaetos        33.65246
+#> 8         -117.4544 Aquila chrysaetos        33.65246
+#> 9         -117.4543 Aquila chrysaetos        34.02910
+#> 10        -117.4543 Aquila chrysaetos        34.02910
 ```
 
 Mapping the data
 
 
 ```r
-out <- bison_solr(scientificName = "Ursus americanus", rows = 200)
+out <- bison_solr(scientificName = "Aquila chrysaetos", rows = 1000)
 bisonmap(out)
 ```
 
