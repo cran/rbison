@@ -5,7 +5,7 @@ Description: Interface to the 'USGS' 'BISON' (<https://bison.usgs.gov/>)
     species in the United States from participating data providers. You can get
     data via 'taxonomic' and location based queries. A simple function
     is provided to help visualize data.
-Version: 0.7.0
+Version: 0.8.0
 License: MIT + file LICENSE
 URL: https://github.com/ropensci/rbison
 BugReports: https://github.com/ropensci/rbison/issues
@@ -16,17 +16,17 @@ Authors@R: c(person("Scott", "Chamberlain",
 LazyData: true
 VignetteBuilder: knitr
 Encoding: UTF-8
-Imports: plyr, crul (>= 0.3.4), ggplot2, mapproj, grid, sp, dplyr (>=
+Imports: plyr, crul (>= 0.7.4), ggplot2, mapproj, grid, sp, dplyr (>=
         0.5.0), jsonlite (>= 1.1), data.table
-Suggests: roxygen2 (>= 6.1.0), knitr, testthat, taxize, vcr
-RoxygenNote: 6.1.0
+Suggests: roxygen2 (>= 6.1.1), knitr, testthat, taxize, vcr (>= 0.2.6)
+RoxygenNote: 6.1.1
 X-schema.org-applicationCategory: DataAccess
 X-schema.org-keywords: species, occurrences, biodiversity, maps, USGS,
         BISON
 X-schema.org-isPartOf: "https://ropensci.org"
 NeedsCompilation: no
-Packaged: 2018-10-25 16:03:48 UTC; sckott
+Packaged: 2019-05-03 20:25:26 UTC; sckott
 Author: Scott Chamberlain [aut, cre] (<https://orcid.org/0000-0003-1444-9135>)
 Maintainer: Scott Chamberlain <myrmecocystus@gmail.com>
 Repository: CRAN
-Date/Publication: 2018-10-25 16:30:03 UTC
+Date/Publication: 2019-05-03 20:50:03 UTC
